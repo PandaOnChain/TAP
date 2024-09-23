@@ -1,0 +1,25 @@
+The Almanac of Practices
+
+install dependencies
+
+create backend/app/alembic
+                  /api/routes
+                  /core
+                  /main.py      | from fastapi import FastAPI
+                                | app = FastAPI() 
+        __init__.py to every folder
+
+api/routes/users.py | from fastapi import APIRouter
+
+https://dashboard.ngrok.com/get-started/setup/windows
+ngrok http http://localhost:8000
+
+npm install -g create-next-app
+npm install @twa-dev/sdk jose
+
+
+app/components/TelegramAuth.jsx     | 
+                                    | 
+app/layout.js   | <head>
+                |   <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive"/>
+                | </head>
