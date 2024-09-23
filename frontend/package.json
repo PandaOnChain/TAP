@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@twa-dev/sdk": "^7.10.1",
+    "eruda": "^3.3.0",
     "next": "14.2.12",
     "react": "^18",
     "react-dom": "^18"

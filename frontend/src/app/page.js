@@ -15,10 +15,12 @@ export default function Home() {
 					body: JSON.stringify(userData)
 				}
 			);
+			console.log(userData)
 		};
 		if (WebApp.initDataUnsafe.user) {
 			setUserData(WebApp.initDataUnsafe.user) 
 			sendInitData()
+			console.log(WebApp.initData.user)
 			
 		}
 	},[])
