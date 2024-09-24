@@ -3,10 +3,32 @@ import TelegramAuth from "./components/TelegramAuth";
 import { useEffect, useState } from "react";
 import WebApp from "@twa-dev/sdk";
 
+const sendInitData = async (userData) => {
+	const userdatadata = JSON.stringify(userData)
+	console.log(userdatadata);
+	try {
+		const response = await fetch(
+			"https://3189-31-30-167-157.ngrok-free.app/telegram/",
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json", 
+				},
+				body: userdatadata,
+			}
+		);
+		console.error(userData);
+	} catch (error) {
+		console.error("error fetching data:", error);
+	}
+};
+
 
 export default function Home() {
 	const [userData, setUserData] = useState(null);
 	const [erudaInitialized, setErudaInitialized] = useState(false);
+	const [userInitData, setUserInitData] = useState(null)
+	
 
 	useEffect( ( ) => { 
 		const script = document.createElement("script");
@@ -20,27 +42,22 @@ export default function Home() {
 
 
 	useEffect(() => {
-		const sendInitData = async () => {
-			try {
-				const response = await fetch(
-					"https://3189-31-30-167-157.ngrok-free.app/telegram",
-					{
-						method: "POST",
-						body: JSON.stringify({ initData: userData }),
-					}
-				);
-				console.log(userData);
-			} catch (error) {
-				console.error("error fetching data:", error);
-			}
-		};
+		
 		if (WebApp.initDataUnsafe.user) {
-			setUserData(WebApp.initDataUnsafe.user);
-			sendInitData();
-			console.debug(WebApp.initData.user);
+			setUserData(WebApp.initDataUnsafe.user);  
+			setUserInitData(WebApp.initData)
 		}
 	}, []);
- 
+	
+	const handleShowUserData = () => {
+		console.log(userData)
+		console.debug(WebApp.initData);
+		console.error(WebApp)
+	}
+
+	const handleSendUserData = () => {
+		sendInitData(userData)
+	}
 
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-center p-24">
@@ -58,6 +75,9 @@ export default function Home() {
 				) : (
 					<p>No data yet</p>
 				)}
+
+				<button type="button" className="p-3 rounded m-3 bg-gray" onClick={handleShowUserData}>Show user data</button>
+				<button type="button" className="p-3 rounded hover:bg-blue" onClick={handleSendUserData}>Send data</button>
 			</div>
 		</main>
 	);
