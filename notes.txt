@@ -11,6 +11,8 @@ create backend/app/alembic
 
 api/routes/users.py | from fastapi import APIRouter
 
+add CORS
+
 https://dashboard.ngrok.com/get-started/setup/windows
 ngrok http http://localhost:8000
 
