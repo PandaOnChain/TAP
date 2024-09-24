@@ -20,17 +20,23 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <head>
-        <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive"/>
-        <Script src="https://cdn.jsdelivr.net/npm/eruda"/>
-        <Script>eruda.init()</Script>
-      </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+		<html lang="en">
+			<head>
+				<Script
+					src="https://telegram.org/js/telegram-web-app.js"
+					strategy="beforeInteractive"
+				/>
+				<Script
+					src="https://cdn.jsdelivr.net/npm/eruda"
+					strategy="beforeInteractive"
+				/>
+				<script>eruda.init()</script>
+			</head>
+			<body
+				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+			>
+				{children}
+			</body>
+		</html>
   );
 }

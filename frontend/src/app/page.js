@@ -5,6 +5,9 @@ import TelegramAuth from "./components/TelegramAuth";
 import { useEffect, useState } from "react";
 import WebApp from "@twa-dev/sdk";
 
+
+
+
 export default function Home() {
 	const [userData, setUserData] = useState(null)
 	useEffect(()=>{
@@ -20,7 +23,7 @@ export default function Home() {
 		if (WebApp.initDataUnsafe.user) {
 			setUserData(WebApp.initDataUnsafe.user) 
 			sendInitData()
-			console.log(WebApp.initData.user)
+			console.debug(WebApp.initData.user)
 			
 		}
 	},[])
