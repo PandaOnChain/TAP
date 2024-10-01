@@ -16,6 +16,9 @@ add CORS
 https://dashboard.ngrok.com/get-started/setup/windows
 ngrok http http://localhost:8000
 
+ngrok config add-authtoken 1bgkFQ2q6M1GSAFvi289mUeMMgh_73VY6bgeXbRHgDmhEaYkk
+ngrok config add-authtoken 2mVm2DXnDy6XRLrnJOJaVAB54uu_29nh6ghQfkx93BGq1mcAr
+
 npm install -g create-next-app
 npm install @twa-dev/sdk jose
 
@@ -25,3 +28,18 @@ app/components/TelegramAuth.jsx     |
 app/layout.js   | <head>
                 |   <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive"/>
                 | </head>
+
+######## user instance #########
+initDataUnsafe: Object
+        auth_date: "1727191584"
+        chat_instance: "-4783509021205096220"
+        chat_type: "sender"
+        hash: "acc53b1183d71e487f950912f939f3a769c0203be7427f961111e6f80316ddfa"
+        user: Object
+                allows_write_to_pm: true
+                first_name: "Нина"
+                id: 693758237
+                language_code: "en"
+                last_name: "Булатова"
+                username: "h2hydro"
+##################################

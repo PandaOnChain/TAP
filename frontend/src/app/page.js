@@ -8,11 +8,11 @@ const sendInitData = async (userData) => {
 	console.log(userdatadata);
 	try {
 		const response = await fetch(
-			"https://3189-31-30-167-157.ngrok-free.app/telegram/",
+			"https://36a7-31-30-167-157.ngrok-free.app/auth/",
 			{
 				method: "POST",
 				headers: {
-					"Content-Type": "application/json", 
+					"Content-Type": "application/json",
 				},
 				body: userdatadata,
 			}
@@ -44,7 +44,7 @@ export default function Home() {
 	useEffect(() => {
 		
 		if (WebApp.initDataUnsafe.user) {
-			setUserData(WebApp.initDataUnsafe.user);  
+			setUserData(WebApp.initDataUnsafe);  
 			setUserInitData(WebApp.initData)
 		}
 	}, []);

@@ -9,7 +9,7 @@ const TelegramAuth = () => {
 
     useEffect(()=>{
         const checkAuth = async () => {
-            const response = await fetch('/api/session')
+            const response = await fetch('/auth/session')
             if (response.ok) {
                 setIsAuthenticated(true)
             }
@@ -36,6 +36,7 @@ const TelegramAuth = () => {
                 if (response.ok){
                     setIsAuthenticated(true)
                     router.refresh()
+                    router.push("/protected")
                 } else {
                     console.error('Authentication failed')
                     setIsAuthenticated(false)
