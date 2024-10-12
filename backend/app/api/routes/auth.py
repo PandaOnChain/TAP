@@ -35,8 +35,8 @@ def authenticate_user(initData: InitData):
     # print(f"username: {initData.user.username}")
     validationResult = validateTelegramWebAppData(initData.initData)
     if validationResult:
-        user = {"telegramId": validationResult["user"]["id"]}
-        print(user)
+        # user = {"telegramId": validationResult["user"]["id"]}
+        # print(user)
         # new session
         expires = datetime.now()  # +1day
         # session = encrypt(user, expires )
@@ -92,25 +92,27 @@ def validateTelegramWebAppData(telegramInitData: str):
         f"{key}={value}" for key, value in sorted(parsedData.items())
     )  # sort keys by alphabet and make string {key}={value}
 
-    secret_key = hmac.new(BOT_TOKEN.encode("utf-8"), "WebAppData".encode("utf-8"), hashlib.sha256).digest()
-    calculated_hash = hmac.new(secret_key, data_check_string.encode("utf-8"), hashlib.sha256).hexdigest()
+    print(data_check_string)
+
+    secret_key = hmac.new(
+        "WebAppData".encode(), BOT_TOKEN.encode(), hashlib.sha256
+    ).digest()
+    calculated_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
+
+    print(f"hash:  {hash}\nchash: {calculated_hash}")
 
     if hash == calculated_hash:
         user = parsedData["user"]  # initData["user"]
-        print(user)
+        print(f"YYYYYYYYYYYYESSSS{user}")
 
     return parsedData # {validatedData, user, message}
 
 
 def parseInitData(initData: str) -> dict:
-    parts = initData.split("&")
+    data_check_string = unquote(initData)
+    parts = data_check_string.split("&")
     user_data = {}
     for part in parts:
-        key, value = part.split("=")
-        key = unquote(key)
-        value = unquote(value)
-        if key == "user":
-            user_data[key] = json.loads(value)
-        else:
-            user_data[key] = value
+        key, value = part.split("=")  
+        user_data[key] = value 
     return user_data
