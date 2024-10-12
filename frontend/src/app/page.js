@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import WebApp from "@twa-dev/sdk";
 
 const sendInitData = async (userData) => {
-	const userdatadata = JSON.stringify(userData)
+	const userdatadata = JSON.stringify({initData: userData})
 	console.log(userdatadata);
 	try {
 		const response = await fetch(
-			"https://36a7-31-30-167-157.ngrok-free.app/auth/",
+			"https://7806-31-30-167-157.ngrok-free.app/auth/",
 			{
 				method: "POST",
 				headers: {
@@ -56,7 +56,7 @@ export default function Home() {
 	}
 
 	const handleSendUserData = () => {
-		sendInitData(userData)
+		sendInitData(userInitData)
 	}
 
 	return (

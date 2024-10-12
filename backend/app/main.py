@@ -17,7 +17,7 @@ class User(BaseModel):
 origins = [
     "http://localhost",
     "http://localhost:3000",
-    "https://780a-31-30-167-157.ngrok-free.app",
+    "https://2ef8-31-30-167-157.ngrok-free.app",
 ]
 
 app.add_middleware(
