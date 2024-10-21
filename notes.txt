@@ -43,3 +43,21 @@ initDataUnsafe: Object
                 last_name: "Булатова"
                 username: "h2hydro"
 ##################################
+
+create database.py, .env, models.py
+-------------------------------
+sudo su postgres & psql 	| \c coredb; 	| GRANT ALL ON SCHEMA public TO myuser;
+#psql DROP DATABASE postgrestapdb;
+CREATE DATABASE postgrestapdb;
+CREATE USER tapadmin WITH PASSWORD 'postgres';
+GRANT ALL PRIVILEGES ON DATABASE postgrescleartdb TO cleart;
+ALTER USER cleart CREATEDB;
+
+#GRANT ALL ON DATABASE postgrescleartdb TO cleart;
+#ALTER DATABASE postgrescleartdb OWNER TO cleart;
+#GRANT USAGE, CREATE ON SCHEMA PUBLIC TO cleart;
+
+-------------------------------
+
+sudo apt-get install libpq-dev python3-dev
+pip install psycopg2

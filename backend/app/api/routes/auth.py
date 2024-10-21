@@ -1,10 +1,10 @@
 from datetime import datetime
-import hashlib
-import hmac
+from typing import Any
 from fastapi import APIRouter, HTTPException, status
-from urllib.parse import unquote
-import json
 from pydantic import BaseModel
+from app.core.dependencies import SessionDep, generate_token, CurrentUser
+from app.core.models import Token
+from app.core.crud import create_user, get_user_by_userId, validateTelegramWebAppData 
 
 
 class User(BaseModel):
@@ -31,35 +31,21 @@ router = APIRouter(prefix="/auth")
 
 
 @router.post("/")
-def authenticate_user(initData: InitData):
-    # print(f"username: {initData.user.username}")
-    validationResult = validateTelegramWebAppData(initData.initData)
-    if validationResult:
-        # user = {"telegramId": validationResult["user"]["id"]}
-        # print(user)
-        # new session
-        expires = datetime.now()  # +1day
-        # session = encrypt(user, expires )
-
-        # Save the session in a cookie
-        # cookies().set("session", session, {expires, httpOnly: True})
-
-        return {"message": "Authentication successful"}
-
-    else:
-        return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-
-    return {"username": initData.user.username}
+def authenticate_user(initData: InitData, session: SessionDep) -> Token: 
+    validation_result = validateTelegramWebAppData(telegramInitData=initData.initData)
+    if not validation_result:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid Telegram data"
+        )
+    db_user = get_user_by_userId(session=session, id=validation_result["id"])
+    if not db_user:
+        create_user(session=session, user_create=validation_result)
+    return Token(access_token=generate_token(validation_result["id"]))
 
 
 @router.get("/session")
-def check_session():
-    # session = getSession()
-
-    if session:
-        return {"isAuthenticated": True}
-    else:
-        return {"isAuthenticated": False}
+def check_session(current_user: CurrentUser) -> Any:
+    return current_user
 
 
 # get a secret key to encode
@@ -68,51 +54,3 @@ def check_session():
 # get session cookie retrieves session from cookie, if cookie does not exist return null else decrypt session and return session data
 # function update session. if session doesn't exist return , else decrypt session, refresh session expiration time: curr time + session duration.
 # set the updated cookie to cookie named session
-
-
-# function ValidateTelegramWebAppData gets telegramInitData as string
-#
-
-
-def validateTelegramWebAppData(telegramInitData: str):
-    BOT_TOKEN = "1261793792:AAHbQxCX8-ywsNEW_6oeZn5CP7KUPZlTtgQ"
-
-    parsedData = parseInitData(initData=telegramInitData)
-    # get hash parameter from telegramInitData
-    hash = parsedData["hash"]
-    # if !hash return {message: "Hash is missing from initData", validateData: None, user: {}}
-
-    # delete hash parameter from initData
-    # retrieve auth_date parameter from initData
-    # TODO if auth_date older then 1 day, raise exception and renew token
-
-    parsedData.pop("hash")
-
-    data_check_string = "\n".join(
-        f"{key}={value}" for key, value in sorted(parsedData.items())
-    )  # sort keys by alphabet and make string {key}={value}
-
-    print(data_check_string)
-
-    secret_key = hmac.new(
-        "WebAppData".encode(), BOT_TOKEN.encode(), hashlib.sha256
-    ).digest()
-    calculated_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
-
-    print(f"hash:  {hash}\nchash: {calculated_hash}")
-
-    if hash == calculated_hash:
-        user = parsedData["user"]  # initData["user"]
-        print(f"YYYYYYYYYYYYESSSS{user}")
-
-    return parsedData # {validatedData, user, message}
-
-
-def parseInitData(initData: str) -> dict:
-    data_check_string = unquote(initData)
-    parts = data_check_string.split("&")
-    user_data = {}
-    for part in parts:
-        key, value = part.split("=")  
-        user_data[key] = value 
-    return user_data
