@@ -16,6 +16,15 @@ def create_user(*, session: Session, user_create: UserBase):
     session.refresh(db_obj)
     return db_obj
 
+def update_user(*, session: Session, user_id: int, user_update: UserBase):
+    user = session.get(User, user_id)
+    # update_dict = user_update.model_dump(exclude_unset=True)
+    user.sqlmodel_update(user_update)
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return None
+
 def get_user_by_userId(*, session: Session, id: int):
     statement = select(User).where(User.id == id)
     session_user = session.exec(statement).first()
@@ -41,15 +50,13 @@ def validateTelegramWebAppData(telegramInitData: str):
     calculated_hash = hmac.new(
         secret_key, data_check_string.encode(), hashlib.sha256
     ).hexdigest()
-
-    print(f"hash:  {hash}\nchash: {calculated_hash}")
+ 
 
     if hash == calculated_hash:
-        user = json.loads(parsedData["user"])
-        print(f"YYYYYYYYYYYYESSSS{user}")
+        user = json.loads(parsedData["user"]) 
         return user
     else:
-        return None
+        raise HTTPException(status_code=400, detail="Hash has not verified")
 
 
 def parseInitData(initData: str) -> dict:

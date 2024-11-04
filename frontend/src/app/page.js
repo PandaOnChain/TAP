@@ -2,24 +2,30 @@
 import TelegramAuth from "./components/TelegramAuth";
 import { useEffect, useState } from "react";
 import WebApp from "@twa-dev/sdk";
+import Link from "next/link";
 
 
 
 //store to local storage the token
 //make new request with included token and make separate button to get data
 
+// try to get token
+// if localstorage.token !==null => return home page component  // check Suspense react // Ch9 Streaming
+// return loading page
+
 export default function Home() {
 	const [userData, setUserData] = useState(null);
 	const [erudaInitialized, setErudaInitialized] = useState(false);
 	const [userInitData, setUserInitData] = useState(null)
 	const [accessToken, setAccessToken] = useState(null)
+	const ngrokUrl = "https://621f-195-113-242-133.ngrok-free.app";
 	
 
 	const sendInitData = async (userData) => {
 	const userdatadata = JSON.stringify({initData: userData}) 
 	try {
 		const response = await fetch(
-			"https://c209-31-30-167-155.ngrok-free.app/auth/",
+			`${ngrokUrl}/auth/`,
 			{
 				method: "POST",
 				headers: {
@@ -31,6 +37,7 @@ export default function Home() {
 		const result = await response.json();
 		console.log("Success:", result);  
 		setAccessToken(result.access_token)
+		localStorage.setItem("access_token", result.access_token)
 	} catch (error) {
 		console.error("error fetching Initdata:", error);
 	}
@@ -67,16 +74,14 @@ export default function Home() {
 
 	const handleGetSession = async () =>{
 		try{
-		const userRequset = await fetch(
-			"https://c209-31-30-167-155.ngrok-free.app/auth/session/",
-			{
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-					"Authorization": `Bearer ${accessToken}`,
-				},
-			}
-		);
+		const userRequset = await fetch(`${ngrokUrl}/auth/session/`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+				"ngrok-skip-browser-warning": "nadoel",
+			},
+		});
 		console.log("access_token", accessToken)
 		const userResult = await userRequset.json()
 		console.log("user data", userResult)
@@ -123,6 +128,7 @@ export default function Home() {
 				>
 					Get session
 				</button>
+				<Link href={"/home/"}>go to home</Link>
 			</div>
 		</main>
 	);

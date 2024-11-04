@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from .api.routes import auth
+from .api.routes import auth, repetition
 
 app = FastAPI(title="The Almanac of Practice API")
 
@@ -9,7 +9,7 @@ app = FastAPI(title="The Almanac of Practice API")
 origins = [
     "http://localhost",
     "http://localhost:3000",
-    "https://09c6-31-30-167-155.ngrok-free.app",
+    "https://1f0d-195-113-242-133.ngrok-free.app",
 ]
 
 app.add_middleware(
@@ -28,3 +28,4 @@ def first():
 
 
 app.include_router(auth.router)
+app.include_router(repetition.router)

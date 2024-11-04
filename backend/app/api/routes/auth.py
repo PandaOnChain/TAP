@@ -1,19 +1,19 @@
 from datetime import datetime
 from typing import Any
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Response
 from pydantic import BaseModel
 from app.core.dependencies import SessionDep, generate_token, CurrentUser
-from app.core.models import Token
-from app.core.crud import create_user, get_user_by_userId, validateTelegramWebAppData 
+from app.core.models import Token, User
+from app.core.crud import create_user, get_user_by_userId, update_user, validateTelegramWebAppData
 
 
-class User(BaseModel):
-    allows_write_to_pm: bool
-    first_name: str
-    id: int
-    language_code: str
-    last_name: str | None = None
-    username: str | None = None
+# class User(BaseModel):
+#     allows_write_to_pm: bool
+#     first_name: str
+#     id: int
+#     language_code: str
+#     last_name: str | None = None
+#     username: str | None = None
 
 
 class InitDataUnsafe(BaseModel):
@@ -27,11 +27,12 @@ class InitDataUnsafe(BaseModel):
 class InitData(BaseModel):
     initData: str
 
+
 router = APIRouter(prefix="/auth")
 
 
 @router.post("/")
-def authenticate_user(initData: InitData, session: SessionDep) -> Token: 
+def authenticate_user(initData: InitData, session: SessionDep) -> Token:
     validation_result = validateTelegramWebAppData(telegramInitData=initData.initData)
     if not validation_result:
         raise HTTPException(
@@ -40,12 +41,29 @@ def authenticate_user(initData: InitData, session: SessionDep) -> Token:
     db_user = get_user_by_userId(session=session, id=validation_result["id"])
     if not db_user:
         create_user(session=session, user_create=validation_result)
-    return Token(access_token=generate_token(validation_result["id"]))
+    else:
+        fields_to_check = [
+            "allows_write_to_pm",
+            "first_name",
+            "language_code",
+            "last_name",
+            "username",
+            "is_premium",
+        ] 
+        for field in fields_to_check:
+            if getattr(db_user, field) != validation_result.get(field):
+                update_user(session=session, user_id=db_user.id, user_update=validation_result)
+                break
+    db_user.last_sign_in = datetime.now()
+    session.add(db_user)
+    session.commit() 
+    new_access_token = generate_token(validation_result["id"])
+    return Token(access_token=new_access_token)
 
 
 @router.get("/session")
 def check_session(current_user: CurrentUser) -> Any:
-    return current_user
+    return {"user": current_user}
 
 
 # get a secret key to encode
