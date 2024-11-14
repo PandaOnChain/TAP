@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from uuid import UUID, uuid4
 from sqlalchemy import table
 from sqlmodel import Field, SQLModel, create_engine, Session, select
@@ -50,30 +50,39 @@ class Repetition(RepetitionBase, table=True):
     updated: datetime | None = Field(default_factory=datetime.now)
 
 
+class WeekNote(SQLModel):
+    id: int
+    date: date
+    done: bool | None = False
+    note: str | None = None
+
+
 class RepetitionPublic(RepetitionBase):
     id: UUID
+    week_notes: list[WeekNote] 
 
 class RepetitionsPublic(SQLModel):
-    data: list[RepetitionPublic]
+    repetitions: list[RepetitionPublic]
     count: int 
 
 
 class DailyNoteBase(SQLModel):
+    date: date
+    repetition_id: UUID
     done: bool | None = False
     note: str | None = None
 
 class DailyNoteCreate(DailyNoteBase):   
     pass
 
-class DailyNoteUpdate(DailyNoteBase):
-    done: bool | None = None
-    note: str | None = None
-    updated: datetime | None = Field(default_factory=datetime.now) 
+class DailyNoteUpdate(SQLModel):
+    id: int
+    done: bool  
+    note: str | None = None  
 
 class DailyNote(DailyNoteBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     done: bool
-    description: str | None = None
     created: datetime | None = Field(default_factory=datetime.now)
     updated: datetime | None = Field(default_factory=datetime.now)
     repetition_id: UUID = Field(foreign_key="repetition.id", nullable=False, ondelete="CASCADE")

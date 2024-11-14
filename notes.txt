@@ -64,7 +64,7 @@ pip install psycopg2
 
 
 sudo -i -u postgres
-psql -U postgres -d postgrestapadb #db_name
+psql -U postgres -d postgrestapdb #db_name
 \dt 
 \d table_name
 TABLE public.user;
@@ -76,3 +76,6 @@ env.py  | from core.models import SQLModel
         | from core.database import DATABASE_URL
         | config.set_main_option("sqlalchemy.url", DATABASE_URL)
         | target_metadata = SQLModel.metadata
+
+alembic revision --autogenerate -m "commit message"
+alembic upgrade head
