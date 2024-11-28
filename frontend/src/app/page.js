@@ -1,10 +1,13 @@
 "use client";
+
 import TelegramAuth from "./components/TelegramAuth";
 import { Suspense, useEffect, useState } from "react";
 import WebApp from "@twa-dev/sdk";
 import Link from "next/link";
 import { getReps, getToken } from "./lib/dal";
 import Loading from "./components/Loading";
+import App from "./App";
+import { useRouter } from "next/navigation";
 
 //store to local storage the token
 //make new request with included token and make separate button to get data
@@ -13,101 +16,94 @@ import Loading from "./components/Loading";
 // if localstorage.token !==null => return home page component  // check Suspense react // Ch9 Streaming
 // return loading page
 
+
 export default function Home() {
-	const [erudaInitialized, setErudaInitialized] = useState(false);
-	const [userInitData, setUserInitData] = useState(null);
-	const [accessToken, setAccessToken] = useState(null);
 
-	const sendInitData = async (userInitData) => {
-		const userData = JSON.stringify({ initData: userInitData });
-		const accessToken = await getToken(userData);
-		if (accessToken) {
-			localStorage.setItem("access_token", accessToken);
-		}
-	};
+	const router = useRouter()
 
-	useEffect(() => {
-		const script = document.createElement("script");
-		script.src = "https://cdn.jsdelivr.net/npm/eruda";
-		document.body.appendChild(script);
-		script.onload = () => {
-			eruda.init(); 
-		};
-	});
+	useEffect(()=>{
+		router.push("/home/")
+	})
+	// const [erudaInitialized, setErudaInitialized] = useState(false);
+	// const [userInitData, setUserInitData] = useState(null);
+	// const [accessToken, setAccessToken] = useState(null);
 
-	useEffect(() => {
-		if (WebApp.initDataUnsafe.user) {
-			// setUserInitData(WebApp.initData);
-			if (!localStorage.getItem("access_token")) {
-				sendInitData(WebApp.initData);
-			}
-		}
-	}, []);
+	// const sendInitData = async (userInitData) => {
+	// 	const userData = JSON.stringify({ initData: userInitData });
+	// 	const accessToken = await getToken(userData);
+	// 	if (accessToken) {
+	// 		localStorage.setItem("access_token", accessToken);
+	// 	}
+	// };
 
-	const handleShowUserData = () => {
-		console.debug(WebApp.initData);
-		console.error(WebApp);
-	};
+	// useEffect(() => {
+	// 	if (!localStorage.getItem("access_token")) {
+	// 		sendInitData(WebApp.initData);
+	// 	}
+	// }, []);
 
-	const handleSendUserData = () => {
-		sendInitData(userInitData);
-	};
+	// const handleShowUserData = () => {
+	// 	console.debug(WebApp.initData);
+	// 	console.error(WebApp);
+	// };
 
-	const handleGetSession = async () => {
-		try {
-			const userRequset = await fetch(`${ngrokUrl}/auth/session/`, {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${localStorage.getItem(
-						"access_token"
-					)}`,
-				},
-			});
-			console.log("access_token", accessToken);
-			const userResult = await userRequset.json();
-			console.log("user data", userResult);
-		} catch (error) {
-			console.error("error fetching data:", error);
-		}
-	};
+	// const handleSendUserData = () => {
+	// 	sendInitData(userInitData);
+	// };
 
-	const handleGetReps = async () => {
-		const reps = await getReps(localStorage.getItem("access_token"));
-		console.log(reps);
-	};
+	// const handleGetSession = async () => {
+	// 	try {
+	// 		const userRequset = await fetch(`${ngrokUrl}/auth/session/`, {
+	// 			method: "GET",
+	// 			headers: {
+	// 				"Content-Type": "application/json",
+	// 				Authorization: `Bearer ${localStorage.getItem(
+	// 					"access_token"
+	// 				)}`,
+	// 			},
+	// 		});
+	// 		console.log("access_token", accessToken);
+	// 		const userResult = await userRequset.json();
+	// 		console.log("user data", userResult);
+	// 	} catch (error) {
+	// 		console.error("error fetching data:", error);
+	// 	}
+	// };
+
+	// const handleGetReps = async () => {
+	// 	const reps = await getReps(localStorage.getItem("access_token"));
+	// 	console.log(reps);
+	// };
 
 	return (
-		<Suspense fallback={<Loading />}>
-			<main className="flex min-h-screen flex-col items-center justify-center p-24">
-				<h1 className="text-4xl">
-					JWT authentication for Telegram Mini Apps
-				</h1>
-				<div className="flex flex-col">
-					<button
-						type="button"
-						className="p-3 rounded m-3 bg-gray"
-						onClick={handleShowUserData}
-					>
-						Show user data
-					</button>
-					<button
-						type="button"
-						className="p-3 rounded hover:bg-blue"
-						onClick={handleSendUserData}
-					>
-						Send data
-					</button>
-					<button
-						type="button"
-						className="p-3 rounded"
-						onClick={handleGetReps}
-					>
-						Get practices
-					</button>
-					<Link href={"/home/"}>go to home</Link>
-				</div>
-			</main>
-		</Suspense>
+		<main className="flex min-h-screen flex-col items-center justify-center p-24">
+			<h1 className="text-4xl">
+				JWT authentication for Telegram Mini Apps
+			</h1>
+			<div className="flex flex-col">
+				<button
+					type="button"
+					className="p-3 rounded m-3 bg-gray"
+					// onClick={handleShowUserData}
+				>
+					Show user data
+				</button>
+				<button
+					type="button"
+					className="p-3 rounded hover:bg-blue"
+					// onClick={handleSendUserData}
+				>
+					Send data
+				</button>
+				<button
+					type="button"
+					className="p-3 rounded"
+					// onClick={handleGetReps}
+				>
+					Get practices
+				</button>
+				<Link href={"/home/"}>go to home</Link>
+			</div>
+		</main>
 	);
 }

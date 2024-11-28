@@ -1,35 +1,48 @@
 "use client";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useContext, useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import RepCard from "./RepCard";
 import { getReps } from "../lib/dal";
+import { useQuery } from "@tanstack/react-query";
+import { AuthContext } from "../components/auth/Authentication";
+
+function useReps() {
+	const access_token = localStorage.getItem("access_token");
+	return useQuery({
+		queryKey: ["repetitions", access_token],
+		queryFn: () => getReps(access_token),
+	});
+}
 
 const Content = () => {
-	const [repetitions, setRepetitions] = useState([]);
 
-	useEffect(() => {
-		const script = document.createElement("script");
-		script.src = "https://cdn.jsdelivr.net/npm/eruda";
-		document.body.appendChild(script);
-		script.onload = () => {
-			eruda.init();
-		};
-	});
+	const {refetch} = useContext(AuthContext)
 
-	useEffect(() => {
-		const fetchReps = async () => {
-			const reps = await getReps(localStorage.getItem("access_token"));
-			setRepetitions(reps);  
-		};
-		fetchReps();
-	}, []);
+	const { data, isPending, isError } = useReps();
+
+	if (isPending) {
+		return (
+			<div className="flex h-full justify-items-center">
+				<Loading />
+			</div>
+		);
+	}
+
+	if (isError) {
+		//if error, then remove
+		// localStorage.removeItem("access_token");
+		console.log("Error during fetching reps")
+		refetch()
+		return <div>Something went wrong during fetching reps</div>;
+	}
+
+	console.error(data);
+
 	return (
-		<div className="flex flex-col place-content-center pt-20">
-			<Suspense fallback={<Loading />}>
-				{(repetitions || []).map(({ title }, index) => (
-					<RepCard key={index} title={title} />
-				))}
-			</Suspense>
+		<div className="flex flex-col place-content-center mb-20">
+			{data.repetitions.map(({ title, id, week_notes }, index) => (
+				<RepCard key={index} repetitionId={id} weekNotes={week_notes} title={title} />
+			))}
 		</div>
 	);
 };

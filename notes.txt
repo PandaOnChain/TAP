@@ -17,7 +17,7 @@ https://dashboard.ngrok.com/get-started/setup/windows
 ngrok http http://localhost:8000
 
 ngrok config add-authtoken 1bgkFQ2q6M1GSAFvi289mUeMMgh_73VY6bgeXbRHgDmhEaYkk
-ngrok config add-authtoken 2mVm2DXnDy6XRLrnJOJaVAB54uu_29nh6ghQfkx93BGq1mcAr
+ngrok config add-authtoken 2p4XDWsKrScD8jXt64B81Lt3Tal_3iBceP21hBEvf6iVSP7xc
 
 npm install -g create-next-app
 npm install @twa-dev/sdk jose

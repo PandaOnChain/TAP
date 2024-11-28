@@ -85,7 +85,15 @@ def create_repetition(
     session.add(repetition)
     session.commit()
     session.refresh(repetition)
-    return repetition
+
+    repetition_public = RepetitionPublic(
+        id=repetition.id,
+        title=repetition.title,
+        description=repetition.description,
+        frequency_per_week=repetition.frequency_per_week,
+        week_notes=[],
+    )
+    return repetition_public 
 
 
 @router.patch("/{id}")

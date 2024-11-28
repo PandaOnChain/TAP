@@ -9,7 +9,8 @@ app = FastAPI(title="The Almanac of Practice API")
 origins = [
     "http://localhost",
     "http://localhost:3000",
-    "https://923e-193-84-36-65.ngrok-free.app",
+    "http://localhost:4000",
+    "https://d2d5-31-30-167-210.ngrok-free.app",
 ]
 
 app.add_middleware(

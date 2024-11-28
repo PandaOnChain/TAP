@@ -1,76 +1,43 @@
-import React from 'react'
+import React from "react";
+import Image from "next/image";
+import DayButton from "./DayButton";
 
-const RepCard = ({title}) => {
-  return (
-		<div className=" w-[95%] m-3 bg-yellow-500 rounded-lg place-items-center flex flex-col">
+const RepCard = ({ title, repetitionId, weekNotes }) => {
+	const done = true;
+
+	const today = new Date();
+	const daysLetters = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+	const currentDayIndex = today.getDay();
+	const todayDate = today.getDate();
+
+	const dates = [];
+	for (let i = 1; i < 8; i++) {
+		const date = new Date(today);
+		date.setDate(today.getDate() + i - currentDayIndex);
+		dates.push({
+			date: date,
+			dateDay: date.getDate(),
+			timestamp: date.getTime(),
+		});
+	}
+
+	return (
+		<div className="w-[95%] m-3 bg-yellow-500 rounded-lg place-items-center flex flex-col">
 			<div className="p-1">{title}</div>
-			<div className="container px-3 py-1 columns-7">
-				<div className="flex flex-col">
-					<h6 className="text-center">mon</h6>
-					<div className="flex flex-col rounded-md border-2">
-						<h6 className='text-center text-xs'>14</h6>
-                        <div className='place-content-center'>
-                            V
-                        </div>
-					</div>
-				</div>
-				<div className="flex flex-col">
-					<h6 className="text-center">tue</h6>
-					<div className="flex flex-col rounded-md border-2">
-						<h6 className='text-center text-xs'>15</h6>
-                        <div className='place-content-center'>
-                            V
-                        </div>
-					</div>
-				</div>
-				<div className="flex flex-col">
-					<h6 className="text-center">wed</h6>
-					<div className="flex flex-col rounded-md border-2">
-						<h6 className='text-center text-xs'>16</h6>
-                        <div className='place-content-center'>
-                            V
-                        </div>
-					</div>
-				</div>
-				<div className="flex flex-col">
-					<h6 className="text-center">thu</h6>
-					<div className="flex flex-col rounded-md border-2">
-						<h6 className='text-center text-xs'>17</h6>
-                        <div className='place-content-center'>
-                            V
-                        </div>
-					</div>
-				</div>
-				<div className="flex flex-col">
-					<h6 className="text-center">fri</h6>
-					<div className="flex flex-col rounded-md border-2">
-						<h6 className='text-center text-xs'>18</h6>
-                        <div className='place-content-center'>
-                            V
-                        </div>
-					</div>
-				</div>
-				<div className="flex flex-col">
-					<h6 className="text-center">sat</h6>
-					<div className="flex flex-col rounded-md border-2">
-						<h6 className='text-center text-xs'>19</h6>
-                        <div className='place-content-center'>
-                            V
-                        </div>
-					</div>
-				</div>
-				<div className="flex flex-col">
-					<h6 className="text-center">sun</h6>
-					<div className="flex flex-col rounded-md border-2">
-						<h6 className='text-center text-xs'>20</h6>
-                        <div className='place-content-center'>
-                            V
-                        </div>
-					</div>
-				</div>
+			<div className="container px-3 py-1 grid grid-cols-7 gap-2">
+				{" "}
+				{daysLetters.map((day, index) => {
+					const isToday = dates[index].date === todayDate;
+					const isFuture = dates[index].timestamp > today.getTime();
+					const status = done
+					const dayDateNum = dates[index].dateDay
+					return (
+						<DayButton key={day} dayDateNum={dayDateNum} date={dates[index].date} isToday={isToday} isFuture={isFuture} repetitionId={repetitionId}  status={status}/>
+					);
+				})}
 			</div>
 		</div>
-  );
-}
+	);
+};
 
-export default RepCard
+export default RepCard;
