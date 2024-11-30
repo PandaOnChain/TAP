@@ -27,9 +27,7 @@ services:
     depends_on:
       - backend 
     ports:
-      - 4000:80
-    networks:
-      - wappnetwork
+      - 4000:80 
 
 
   db:
