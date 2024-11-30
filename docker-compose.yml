@@ -55,10 +55,7 @@ services:
         resources:
           limits:
             cpus: '1'
-            memory: 4G
-      networks:
-        - appnetwork
-
+            memory: 4G 
 
 networks:
   appnetwork:
