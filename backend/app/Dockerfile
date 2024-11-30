@@ -1,6 +1,9 @@
 FROM python:3.12-slim-bullseye
 
-RUN apt-get update
+RUN apt-get update && apt-get install -y \
+    libpq-dev gcc && \
+    apt-get clean && rm -rf /var/lib/apt/lists/
+ 
 
 WORKDIR /app
 
