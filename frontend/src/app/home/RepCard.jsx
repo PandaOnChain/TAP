@@ -27,12 +27,30 @@ const RepCard = ({ title, repetitionId, weekNotes }) => {
 			<div className="container px-3 py-1 grid grid-cols-7 gap-2">
 				{" "}
 				{daysLetters.map((day, index) => {
-					const isToday = dates[index].date === todayDate;
+					const isToday = dates[index].dateDay === todayDate;
 					const isFuture = dates[index].timestamp > today.getTime();
-					const status = done
-					const dayDateNum = dates[index].dateDay
+					const dayDateNum = dates[index].dateDay;
+
+					const status = weekNotes.find((note) => {
+						const noteDate = new Date(note.date);
+						const buttonDate = new Date(dates[index].date);
+						if (noteDate.getDate() === buttonDate.getDate()) {
+							return note.done;
+						} else {
+							return false;
+						}
+					});
+
 					return (
-						<DayButton key={day} dayDateNum={dayDateNum} date={dates[index].date} isToday={isToday} isFuture={isFuture} repetitionId={repetitionId}  status={status}/>
+						<DayButton
+							key={day}
+							dayDateNum={dayDateNum}
+							date={dates[index].date}
+							isToday={isToday}
+							isFuture={isFuture}
+							repetitionId={repetitionId}
+							status={status}
+						/>
 					);
 				})}
 			</div>

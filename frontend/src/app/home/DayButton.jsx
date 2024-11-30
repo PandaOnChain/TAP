@@ -10,12 +10,7 @@ const DayButton = ({
 	key,
 	dayDateNum,
 }) => {
-	const [done, setDone] = useState(status);
-    // const dateString = date.toLocaleDateString("eu-EU", {
-	// 	year: "numeric",
-	// 	month: "2-digit",
-	// 	day: "2-digit",
-	// });
+	const [done, setDone] = useState(status);  
 	const handleClick = async () => {
 		//date, repetition_id, done
         const year = date.getFullYear();
@@ -51,6 +46,21 @@ const DayButton = ({
 							/>
 						) : (
 							<EndHourGlass width={22} height={22} />
+						))}
+					{!isToday &&
+						!isFuture &&
+						(!done ? (
+							<NotDoneVector
+								width={22}
+								height={22}
+								color={"#FF0000"}
+							/>
+						) : (
+							<DoneVector
+								width={22}
+								height={22}
+								color={"#00FF00"}
+							/>
 						))}
 				</div>
 			</button>
@@ -92,9 +102,9 @@ const EndHourGlass = ({ width, height, color, strokeWidth }) => {
 			<path
 				d="M15 18H9M20 3H19M19 3H5M19 3C19 5.51022 17.7877 7.86592 15.7451 9.32495L12 12M5 3H4M5 3C5 5.51022 6.21228 7.86592 8.25493 9.32495L12 12M20 21H19M19 21H5M19 21C19 18.4898 17.7877 16.1341 15.7451 14.675L12 12M5 21H4M5 21C5 18.4898 6.21228 16.1341 8.25493 14.675L12 12"
 				stroke={color ? color : "#FFFFFF"}
-				stroke-width={strokeWidth ? strokeWidth : "2"}
-				stroke-linecap="round"
-				stroke-linejoin="round"
+				strokeWidth={strokeWidth ? strokeWidth : "2"}
+				strokeLinecap="round"
+				strokeLinejoin="round"
 			/>
 		</svg>
 	);
@@ -158,4 +168,23 @@ const DoneVector = ({ width, height, color, strokeWidth }) => {
 			/>
 		</svg>
 	);
+};
+
+const NotDoneVector = ({ width, height, color, strokeWidth }) => {
+	return (
+	<svg
+		width={`${width ? width : "20"}px`}
+		height={`${height ? height : "20"}px`}
+		viewBox="0 0 24 24"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		<path
+			d="M6 6L18 18M18 6L6 18"
+			stroke={color ? color : "#FFFFFF"}
+			stroke-width={strokeWidth ? strokeWidth : "2"}
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		/>
+	</svg>);
 };
