@@ -79,3 +79,6 @@ env.py  | from core.models import SQLModel
 
 alembic revision --autogenerate -m "commit message"
 alembic upgrade head
+
+
+# REPLACE ENV variables
