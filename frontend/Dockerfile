@@ -6,17 +6,16 @@ COPY package*.json /app/
 
 RUN npm install
 
-COPY ./ /app/
+COPY . .
 
 
 
 RUN npm run build
-RUN npm run export
-
+RUN ls -l /app
 # Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
 FROM nginx:1
-
  
+
 
 COPY --from=build-stage /app/out/ /usr/share/nginx/html
 
