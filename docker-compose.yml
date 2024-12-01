@@ -25,6 +25,8 @@ services:
         limits:
           cpus: '1'
           memory: 4G 
+    networks:
+      - appnetwork
 
   backend:
     build:
@@ -53,6 +55,8 @@ services:
       - backend 
     ports:
       - 3000:80
+    networks:
+      - appnetwork
 
 
 
