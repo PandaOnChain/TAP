@@ -16,7 +16,7 @@ RUN npm run build
 # Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
 FROM nginx:1
 
-COPY --from=builder /app/public ./public
+COPY --from=builder /app/public /usr/share/nginx/html
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
