@@ -3,8 +3,6 @@ import Image from "next/image";
 import DayButton from "./DayButton";
 
 const RepCard = ({ title, repetitionId, weekNotes }) => {
-	const done = true;
-
 	const today = new Date();
 	const daysLetters = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 	const currentDayIndex = today.getDay();

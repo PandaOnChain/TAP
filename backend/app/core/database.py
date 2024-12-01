@@ -12,7 +12,7 @@ DB_USER = dotenv_values(".env")["DB_USER"]
 DB_PASS = dotenv_values(".env")["DB_PASS"]
 DB_NAME = dotenv_values(".env")["DB_NAME"]
 DATABASE_URL = f'{dotenv_values(".env")["DATABASE_URL"]}{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
-
+print("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS RRRRRRRRRRRRRRRRRRRRR :::::::::::::::::::::\n"+DATABASE_URL)
 BOT_TOKEN = dotenv_values(".env")["BOT_TOKEN"]
 
 # engine = create_async_engine(DATABASE_URL,
