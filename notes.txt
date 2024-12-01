@@ -81,4 +81,5 @@ alembic revision --autogenerate -m "commit message"
 alembic upgrade head
 
 
-# REPLACE ENV variables
+# REPLACE ENV variables !!! DB_HOST=db !!!
+docker-compose up --build -d --force-recreate
