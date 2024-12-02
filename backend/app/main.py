@@ -11,6 +11,7 @@ origins = [
     "http://localhost:3000",
     "http://localhost:4000",
     "https://e3bc-31-30-167-210.ngrok-free.app",
+    "https://saburov.xyz"
 ]
 
 app.add_middleware(

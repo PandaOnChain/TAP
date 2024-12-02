@@ -1,4 +1,4 @@
-const ngrokUrl = "https://2b0b-31-30-167-210.ngrok-free.app";
+const ngrokUrl = "https://saburov.xyz/api";
 
 export const getToken = async (initData) => {
 	const response = await fetch(`${ngrokUrl}/auth/`, {

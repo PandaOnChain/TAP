@@ -14,4 +14,4 @@ RUN pip install -r requirements.txt
 
 COPY ./ /app/
 
-CMD ["sh", "-c", "alembic upgrade head && fastapi run main.py --port 8000"]
+CMD ["sh", "-c", "alembic upgrade head && fastapi run main.py --port 8000 --root-path /api/"]
