@@ -3,7 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from .api.routes import auth, repetition, dailynote
 
-app = FastAPI(title="The Almanac of Practice API")
+app = FastAPI(
+    title="The Almanac of Practice API",
+    root_path="/api/",
+)
 
 
 origins = [
