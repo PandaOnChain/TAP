@@ -46,7 +46,8 @@ initDataUnsafe: Object
 
 create database.py, .env, models.py
 -------------------------------
-sudo su postgres & psql 	| \c coredb; 	| GRANT ALL ON SCHEMA public TO myuser;
+sudo su postgres 
+psql 	| \c coredb; 	| GRANT ALL ON SCHEMA public TO myuser;
 #psql DROP DATABASE postgrestapdb;
 CREATE DATABASE postgrestapdb;
 CREATE USER tapadmin WITH PASSWORD 'postgres';
@@ -64,10 +65,16 @@ pip install psycopg2
 
 
 sudo -i -u postgres
-psql -U postgres -d postgrestapdb #db_name
+psql -U postgres -d postgrestapdb #db_name | docker exec -it postgres-tap psql -U tapadmin -d postgrestapdb
 \dt 
 \d table_name
 TABLE public.user;
+
+\c postgrestapdb;
+\dt
+DROP TABLE "user";
+
+
 
 
 migrationfile.py        | import sqlmodel.sql.sqltypes
