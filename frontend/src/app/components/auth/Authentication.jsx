@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
 		isPending,
 	} = useAuth();
 
-    useEffect(() => {
+	useEffect(() => {
 		if (isSuccess) {
 			setIsAuthenticated(true);
 		}
@@ -39,36 +39,34 @@ export const AuthProvider = ({ children }) => {
 
 	if (isPending) {
 		return (
-			<div className="w-full h-full justify-items-center">
+			<div className="flex w-full h-full justify-items-center">
 				<Loading />
 			</div>
 		);
 	}
 
-    if (isError) {
-        return (
-            <div className="w-full h-full justify-items-center">
-                Something went wrong...
-            </div>
-        )
-    }
+	if (isError) {
+		return (
+			<div className="w-full h-full justify-items-center">
+				Something went wrong...
+			</div>
+		);
+	}
 
-	if (isSuccess) { 
-        
+	if (isSuccess) {
 		return (
 			<AuthContext.Provider value={{ isAuthenticated, refetch }}>
 				{children}
 			</AuthContext.Provider>
 		);
-	} 
+	}
 };
 
 const authentincateUser = async () => {
-	
 	const WebApp = (await import("@twa-dev/sdk")).default;
 	WebApp.ready();
 	const initData = WebApp.initData;
-	console.log(WebApp)
+	console.log(WebApp);
 	const tokenInLocalStorage = localStorage.getItem("access_token");
 	if (tokenInLocalStorage) {
 		return true;

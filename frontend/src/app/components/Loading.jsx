@@ -34,28 +34,30 @@ const loadingCircleTransition = {
 
 const Loading = () => {
 	return (
-		<motion.div
-			className="flex justify-around w-8 h-8"
-			variants={loadingContainerVariants}
-			initial="start"
-			animate="end"
-		>
-			<motion.span
-				className="block w-2 h-2 bg-white rounded-full"
-				variants={loadingCircleVariants}
-				transition={loadingCircleTransition}
-			></motion.span>
-			<motion.span
-				className="block w-2 h-2 bg-white rounded-full"
-				variants={loadingCircleVariants}
-				transition={loadingCircleTransition}
-			></motion.span>
-			<motion.span
-				className="block w-2 h-2 bg-white rounded-full"
-				variants={loadingCircleVariants}
-				transition={loadingCircleTransition}
-			></motion.span>
-		</motion.div>
+		<div className="fixed inset-0 flex items-center justify-center">
+			<motion.div
+				className="flex justify-around w-8 h-8"
+				variants={loadingContainerVariants}
+				initial="start"
+				animate="end"
+			>
+				<motion.span
+					className="block w-2 h-2 bg-white rounded-full"
+					variants={loadingCircleVariants}
+					transition={loadingCircleTransition}
+				></motion.span>
+				<motion.span
+					className="block w-2 h-2 bg-white rounded-full"
+					variants={loadingCircleVariants}
+					transition={loadingCircleTransition}
+				></motion.span>
+				<motion.span
+					className="block w-2 h-2 bg-white rounded-full"
+					variants={loadingCircleVariants}
+					transition={loadingCircleTransition}
+				></motion.span>
+			</motion.div>
+		</div>
 	);
 };
 

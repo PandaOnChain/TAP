@@ -1,7 +1,7 @@
-const ngrokUrl = "https://saburov.xyz/api";
+const baseUrl = "https://saburov.xyz/api";
 
 export const getToken = async (initData) => {
-	const response = await fetch(`${ngrokUrl}/auth/`, {
+	const response = await fetch(`${baseUrl}/auth/`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -17,7 +17,7 @@ export const getToken = async (initData) => {
 };
 
 export const getReps = async (access_token) => {
-	const response = await fetch(`${ngrokUrl}/reps/`, {
+	const response = await fetch(`${baseUrl}/reps/`, {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",
@@ -34,7 +34,7 @@ export const getReps = async (access_token) => {
 };
 
 export const createRep = async (access_token, title) => { 
-	const response = await fetch(`${ngrokUrl}/reps/`, {
+	const response = await fetch(`${baseUrl}/reps/`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -52,7 +52,7 @@ export const createRep = async (access_token, title) => {
 }
 
 export const markDaily = async (access_token, repetition_id, date, note, done) => {
-	const response = await fetch(`${ngrokUrl}/reps/daily/`, {
+	const response = await fetch(`${baseUrl}/reps/daily/`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",

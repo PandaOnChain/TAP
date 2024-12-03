@@ -15,24 +15,19 @@ function useReps() {
 }
 
 const Content = () => {
-
-	const {refetch} = useContext(AuthContext)
+	const { refetch } = useContext(AuthContext);
 
 	const { data, isPending, isError } = useReps();
 
 	if (isPending) {
-		return (
-			<div className="flex h-full justify-items-center">
-				<Loading />
-			</div>
-		);
+		return <Loading />;
 	}
 
 	if (isError) {
 		//if error, then remove
 		// localStorage.removeItem("access_token");
-		console.log("Error during fetching reps")
-		refetch()
+		console.log("Error during fetching reps");
+		refetch();
 		return <div>Something went wrong during fetching reps</div>;
 	}
 
@@ -41,7 +36,12 @@ const Content = () => {
 	return (
 		<div className="flex flex-col place-content-center mb-20">
 			{data.repetitions.map(({ title, id, week_notes }, index) => (
-				<RepCard key={index} repetitionId={id} weekNotes={week_notes} title={title} />
+				<RepCard
+					key={index}
+					repetitionId={id}
+					weekNotes={week_notes}
+					title={title}
+				/>
 			))}
 		</div>
 	);
