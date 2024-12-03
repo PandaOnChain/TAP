@@ -31,10 +31,10 @@ const CreateRep = () => {
 	if (!isCreateActive) {
 		return (
 			<div className="flex flex-row w-full items-center px-5  justify-between">
-				<h3 className="text-lg text-black">The Almanac of Practice</h3>
+				<h3 className="text-lg text-white">The Almanac of Practice</h3>
 				<button
 					type="button"
-					className="px-3 py-2 bg-green-400 rounded-lg"
+					className="px-3 py-2 bg-brand-purple rounded-lg"
 					onClick={() => {
 						setIsCreateActive(!isCreateActive);
 					}}
@@ -57,7 +57,7 @@ const CreateRep = () => {
 			/>
 			<button
 				type="button"
-				className="px-3 py-2 bg-green-400 rounded-lg"
+				className="px-3 py-2 bg-brand-purple rounded-lg"
 				onClick={handleCreateButton}
 			>
 				↑

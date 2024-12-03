@@ -20,7 +20,7 @@ const RepCard = ({ title, repetitionId, weekNotes }) => {
 	}
 
 	return (
-		<div className="w-[95%] m-3 bg-yellow-500 rounded-lg place-items-center flex flex-col">
+		<div className="w-[95%] m-3 bg-brand-yellow rounded-lg place-items-center flex flex-col">
 			<div className="p-1">{title}</div>
 			<div className="container px-3 py-1 grid grid-cols-7 gap-2">
 				{" "}

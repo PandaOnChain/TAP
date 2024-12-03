@@ -10,8 +10,8 @@ const HomePage = ({ children }) => {
 				<HomeHeader />
 			</div>
 			<div className="mb-50">{children}</div>
-			<div className="fixed left-0 right-0 bottom-0 flex mx-2 bg-yellow-200 h-[80px] rounded-t-xl">
-				<CreateRep/>
+			<div className="fixed left-0 right-0 bottom-0 flex mx-2 bg-brand-yellow h-[80px] rounded-t-xl">
+				<CreateRep />
 			</div>
 		</div>
 	);

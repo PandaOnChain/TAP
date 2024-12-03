@@ -42,7 +42,7 @@ const DayButton = ({
 							<DoneVector
 								width={22}
 								height={22}
-								color={"#00FF00"}
+								color={"#0ba95b"}
 							/>
 						) : (
 							<EndHourGlass width={22} height={22} />
@@ -53,13 +53,13 @@ const DayButton = ({
 							<NotDoneVector
 								width={22}
 								height={22}
-								color={"#FF0000"}
+								color={"#fc7428"}
 							/>
 						) : (
 							<DoneVector
 								width={22}
 								height={22}
-								color={"#00FF00"}
+								color={"#0ba95b"}
 							/>
 						))}
 				</div>
