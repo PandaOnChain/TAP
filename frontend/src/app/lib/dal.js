@@ -27,12 +27,13 @@ export const getReps = async (access_token) => {
 		},
 	});
 
-	if (!response.ok) {
-		throw new Error("error during fetching repetitions");
-	}
+	
 	if (response.status === 403) {
 		localStorage.removeItem("access_token");
 		throw new Error("Unauthorized: Token cleared due to 403 error.");
+	}
+	if (!response.ok) {
+		throw new Error("error during fetching repetitions");
 	}
 	const repetitions = await response.json();
 	return repetitions;
@@ -50,12 +51,13 @@ export const createRep = async (access_token, title) => {
 		body: JSON.stringify({ title }),
 	});
 
-	if (!response.ok) {
-		throw new Error("error during creating rep");
-	}
+	
 	if (response.status === 403) {
 		localStorage.removeItem("access_token");
 		throw new Error("Unauthorized: Token cleared due to 403 error.");
+	}
+	if (!response.ok) {
+		throw new Error("error during creating rep");
 	}
 	return response;
 };
@@ -78,12 +80,13 @@ export const markDaily = async (
 		body: JSON.stringify({ repetition_id, date, note, done }),
 	});
 
-	if (!response.ok) {
-		throw new Error("error during creating dailyNote");
-	}
+	
 	if (response.status === 403) {
 		localStorage.removeItem("access_token");
 		throw new Error("Unauthorized: Token cleared due to 403 error.");
+	}
+	if (!response.ok) {
+		throw new Error("error during creating dailyNote");
 	}
 	return response;
 };
