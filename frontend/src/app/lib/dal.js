@@ -13,6 +13,7 @@ export const getToken = async (initData) => {
 		throw new Error(`Error during authentication ${response.status}`);
 	}
 
+	localStorage.removeItem("access_token");
 	const result = await response.json();
 	return result.access_token;
 };
@@ -27,9 +28,7 @@ export const getReps = async (access_token) => {
 		},
 	});
 
-	
 	if (response.status === 403) {
-		localStorage.removeItem("access_token");
 		throw new Error("Unauthorized: Token cleared due to 403 error.");
 	}
 	if (!response.ok) {
@@ -51,9 +50,7 @@ export const createRep = async (access_token, title) => {
 		body: JSON.stringify({ title }),
 	});
 
-	
-	if (response.status === 403) {
-		localStorage.removeItem("access_token");
+	if (response.status === 403) { 
 		throw new Error("Unauthorized: Token cleared due to 403 error.");
 	}
 	if (!response.ok) {
@@ -80,9 +77,7 @@ export const markDaily = async (
 		body: JSON.stringify({ repetition_id, date, note, done }),
 	});
 
-	
-	if (response.status === 403) {
-		localStorage.removeItem("access_token");
+	if (response.status === 403) { 
 		throw new Error("Unauthorized: Token cleared due to 403 error.");
 	}
 	if (!response.ok) {

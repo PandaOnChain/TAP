@@ -42,6 +42,7 @@ const RepCard = ({ title, repetitionId, weekNotes, authRefetch }) => {
 					return (
 						<DayButton
 							key={day}
+							day={day}
 							dayDateNum={dayDateNum}
 							date={dates[index].date}
 							isToday={isToday}

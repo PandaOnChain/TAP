@@ -3,7 +3,7 @@ import React, { Suspense, useContext, useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import RepCard from "./RepCard";
 import { getReps } from "../lib/dal";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AuthContext } from "../components/auth/Authentication";
 
 function useReps() {
@@ -15,6 +15,7 @@ function useReps() {
 }
 
 const Content = () => {
+	 
 	const { refetch } = useContext(AuthContext);
 
 	const { data, isPending, isError, error } = useReps();
@@ -25,6 +26,7 @@ const Content = () => {
 
 	if (isError) {
 		if (error?.message.includes("Unauthorized")) {
+			
 			refetch();
 		}
 		return (
@@ -34,7 +36,7 @@ const Content = () => {
 		);
 	}
 
-	console.error(data);
+	console.log(data);
 
 	return (
 		<div className="flex flex-col place-content-center mb-20">

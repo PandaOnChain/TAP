@@ -2,7 +2,7 @@
 
 import { getToken } from "@/app/lib/dal";
 import { createContext, useContext, useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Loading from "../Loading";
 import { useRouter } from "next/router";
 
@@ -20,6 +20,7 @@ const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
+	
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const {
 		data,
@@ -32,11 +33,11 @@ export const AuthProvider = ({ children }) => {
 		error,
 	} = useAuth();
 
-	useEffect(() => {
-		if (isSuccess) {
-			setIsAuthenticated(true);
-		}
-	}, [isSuccess]);
+	// useEffect(() => {
+	// 	if (isSuccess) {
+	// 		setIsAuthenticated(true);
+	// 	}
+	// }, [isSuccess]);
 
 	if (isPending) {
 		return (
@@ -69,10 +70,10 @@ const authentincateUser = async () => {
 	WebApp.ready();
 	const initData = WebApp.initData;
 	console.log(WebApp);
-	const tokenInLocalStorage = localStorage.getItem("access_token");
-	if (tokenInLocalStorage) {
-		return true;
-	}
+	// const tokenInLocalStorage = localStorage.getItem("access_token");
+	// if (tokenInLocalStorage) {
+	// 	return true;
+	// }
 	if (initData) {
 		const access_token = await getToken(initData);
 		if (access_token) {
