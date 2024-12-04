@@ -39,7 +39,7 @@ const Content = () => {
 	console.log(data);
 
 	return (
-		<div className="flex flex-col place-content-center mb-20">
+		<div className="flex flex-col place-content-center mb-20 px-3">
 			{data.repetitions.map(({ title, id, week_notes }, index) => (
 				<RepCard
 					key={index}
