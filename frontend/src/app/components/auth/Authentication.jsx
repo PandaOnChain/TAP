@@ -29,6 +29,7 @@ export const AuthProvider = ({ children }) => {
 		isError,
 		isSuccess,
 		isPending,
+		error,
 	} = useAuth();
 
 	useEffect(() => {
@@ -46,9 +47,10 @@ export const AuthProvider = ({ children }) => {
 	}
 
 	if (isError) {
+		console.log(error);
 		return (
 			<div className="w-full h-full justify-items-center">
-				Something went wrong...
+				Something went wrong... || {error.message} ||
 			</div>
 		);
 	}

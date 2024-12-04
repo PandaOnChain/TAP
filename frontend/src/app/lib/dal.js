@@ -10,8 +10,9 @@ export const getToken = async (initData) => {
 	});
 
 	if (!response.ok) {
-		throw new Error("Error during authentication");
+		throw new Error(`Error during authentication ${response.status}`);
 	}
+
 	const result = await response.json();
 	return result.access_token;
 };
@@ -29,11 +30,15 @@ export const getReps = async (access_token) => {
 	if (!response.ok) {
 		throw new Error("error during fetching repetitions");
 	}
+	if (response.status === 403) {
+		localStorage.removeItem("access_token");
+		throw new Error("Unauthorized: Token cleared due to 403 error.");
+	}
 	const repetitions = await response.json();
 	return repetitions;
 };
 
-export const createRep = async (access_token, title) => { 
+export const createRep = async (access_token, title) => {
 	const response = await fetch(`${baseUrl}/reps/`, {
 		method: "POST",
 		headers: {
@@ -42,16 +47,26 @@ export const createRep = async (access_token, title) => {
 			"ngrok-skip-browser-warning": "nadoel",
 		},
 
-		body: JSON.stringify({ title })
+		body: JSON.stringify({ title }),
 	});
 
 	if (!response.ok) {
 		throw new Error("error during creating rep");
-	} 
+	}
+	if (response.status === 403) {
+		localStorage.removeItem("access_token");
+		throw new Error("Unauthorized: Token cleared due to 403 error.");
+	}
 	return response;
-}
+};
 
-export const markDaily = async (access_token, repetition_id, date, note, done) => {
+export const markDaily = async (
+	access_token,
+	repetition_id,
+	date,
+	note,
+	done
+) => {
 	const response = await fetch(`${baseUrl}/reps/daily/`, {
 		method: "POST",
 		headers: {
@@ -66,6 +81,10 @@ export const markDaily = async (access_token, repetition_id, date, note, done) =
 	if (!response.ok) {
 		throw new Error("error during creating dailyNote");
 	}
+	if (response.status === 403) {
+		localStorage.removeItem("access_token");
+		throw new Error("Unauthorized: Token cleared due to 403 error.");
+	}
 	return response;
 };
 
@@ -77,7 +96,7 @@ export const markDaily = async (access_token, repetition_id, date, note, done) =
 // 		const access_token = getToken(initData);
 // 		if (access_token) {
 // 			localStorage.setItem("access_token", access_token);
-            
+
 // 		}
 // 	}
 

@@ -17,18 +17,21 @@ function useReps() {
 const Content = () => {
 	const { refetch } = useContext(AuthContext);
 
-	const { data, isPending, isError } = useReps();
+	const { data, isPending, isError, error } = useReps();
 
 	if (isPending) {
 		return <Loading />;
 	}
 
 	if (isError) {
-		//if error, then remove
-		// localStorage.removeItem("access_token");
-		console.log("Error during fetching reps");
-		refetch();
-		return <div>Something went wrong during fetching reps</div>;
+		if (error?.message.includes("Unauthorized")) {
+			refetch();
+		}
+		return (
+			<div>
+				Something went wrong during fetching reps || {error.message} ||
+			</div>
+		);
 	}
 
 	console.error(data);
@@ -41,6 +44,7 @@ const Content = () => {
 					repetitionId={id}
 					weekNotes={week_notes}
 					title={title}
+					authRefetch={refetch}
 				/>
 			))}
 		</div>

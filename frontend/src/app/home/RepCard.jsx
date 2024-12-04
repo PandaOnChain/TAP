@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import DayButton from "./DayButton";
 
-const RepCard = ({ title, repetitionId, weekNotes }) => {
+const RepCard = ({ title, repetitionId, weekNotes, authRefetch }) => {
 	const today = new Date();
 	const daysLetters = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 	const currentDayIndex = today.getDay();
@@ -48,6 +48,7 @@ const RepCard = ({ title, repetitionId, weekNotes }) => {
 							isFuture={isFuture}
 							repetitionId={repetitionId}
 							status={status}
+							authRefetch={authRefetch}
 						/>
 					);
 				})}

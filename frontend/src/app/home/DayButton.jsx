@@ -9,6 +9,7 @@ const DayButton = ({
     date,
 	key,
 	dayDateNum,
+	authRefetch
 }) => {
 	const [done, setDone] = useState(status);  
 	const handleClick = async () => {
@@ -18,11 +19,25 @@ const DayButton = ({
 		const day = String(date.getDate()).padStart(2, "0");
 		const dateString = `${year}-${month}-${day}`; 
         console.log(repetitionId)
-		const access_token = localStorage.getItem("access_token");
-		const response = await markDaily(access_token, repetitionId, dateString, "", !done);
-		if (response.ok) {
-			setDone(() => !done);
+		try {
+			const access_token = localStorage.getItem("access_token");
+			const response = await markDaily(
+				access_token,
+				repetitionId,
+				dateString,
+				"",
+				!done
+			);
+			if (response.ok) {
+				setDone(() => !done);
+			}
+		} catch (error) {
+			if (error?.message.includes("Unauthorized")) {
+				authRefetch();
+			}
+			console.log("Error:", error)
 		}
+		
 	};
 	return (
 		<div className="flex flex-col">
