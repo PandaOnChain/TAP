@@ -6,7 +6,7 @@ import CreateRep from "./CreateRep";
 const HomePage = ({ children }) => {
 	return (
 		<div className="max-w-screen-sm mx-auto flex h-screen flex-col relative bg-black">
-			<div className="w-full flex-none sticky top-0 ">
+			<div className="w-full flex-none sticky top-0 bg-black">
 				<HomeHeader />
 			</div>
 			<div className="mb-50">{children}</div>

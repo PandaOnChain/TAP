@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { markDaily } from "../lib/dal";
 import { useQueryClient } from "@tanstack/react-query";
+import useLongPress from "../hooks/useLongPress";
 
 const DayButton = ({
 	isToday,
@@ -13,6 +14,17 @@ const DayButton = ({
 	authRefetch,
 }) => {
 	const queryClient = useQueryClient();
+
+	const [modalIsOpen, setModalIsOpen] = useState(false);
+	const attrs = useLongPress(
+		() => {
+			setModalIsOpen(true);
+		},
+		{ 
+			threshold: 500,
+		}
+	);
+
 	const [done, setDone] = useState(status);
 	const handleClick = async () => {
 		//date, repetition_id, done
@@ -52,6 +64,7 @@ const DayButton = ({
 				}`}
 				disabled={isFuture}
 				onClick={handleClick}
+				{...attrs}
 			>
 				<h6 className="text-center text-xs">{dayDateNum}</h6>
 				<div className="">
@@ -83,11 +96,27 @@ const DayButton = ({
 						))}
 				</div>
 			</button>
+			{modalIsOpen && <DailyModal setModalIsOpen={setModalIsOpen} />}
 		</div>
 	);
 };
 
 export default DayButton;
+
+const DailyModal = ({ setModalIsOpen }) => {
+	return (
+		<dialog className="fixed bg-brand-purple w-[50%] m-auto block border rounded-xl p-10">
+			<button
+				onClick={() => setModalIsOpen(false)}
+				className="absolute top-4 right-4 "
+			>
+				{<NotDoneVector width={22} height={22} color={"#ffffff"} />}
+			</button>
+			<h2>05.12.2024</h2>
+			<p>This is a modal triggered by a long press.</p>
+		</dialog>
+	);
+};
 
 const StartHourGlass = ({ width, height, color, strokeWidth }) => {
 	return (
