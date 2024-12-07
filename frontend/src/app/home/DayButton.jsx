@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { markDaily } from "../lib/dal";
 import { useQueryClient } from "@tanstack/react-query";
 import useLongPress from "../hooks/useLongPress";
@@ -10,38 +10,28 @@ const DayButton = ({
 	repetitionId,
 	date,
 	day,
+	title,
 	dayDateNum,
 	authRefetch,
+	note,
 }) => {
 	const queryClient = useQueryClient();
 
 	const [modalIsOpen, setModalIsOpen] = useState(false);
+
 	const attrs = useLongPress(
 		() => {
 			setModalIsOpen(true);
 		},
-		{ 
+		{
 			threshold: 500,
 		}
 	);
 
-	const [done, setDone] = useState(status);
-	const handleClick = async () => {
-		//date, repetition_id, done
-		const year = date.getFullYear();
-		const month = String(date.getMonth() + 1).padStart(2, "0");
-		const day = String(date.getDate()).padStart(2, "0");
-		const dateString = `${year}-${month}-${day}`;
-		console.log(repetitionId);
+	const [done, setDone] = useState(status?.done);
+	const handleClick = async () => { 
 		try {
-			const access_token = localStorage.getItem("access_token");
-			const response = await markDaily(
-				access_token,
-				repetitionId,
-				dateString,
-				"",
-				!done
-			);
+			const response = await markDaily(repetitionId, date, note?.note, !done);
 			if (response.ok) {
 				setDone(() => !done);
 			}
@@ -96,25 +86,77 @@ const DayButton = ({
 						))}
 				</div>
 			</button>
-			{modalIsOpen && <DailyModal setModalIsOpen={setModalIsOpen} />}
+			{modalIsOpen && (
+				<DailyModal
+					setModalIsOpen={setModalIsOpen}
+					date={date}
+					title={title}
+					repetitionId={repetitionId}
+					done={done ? done.done : false}
+					dayNote={note?.note}
+				/>
+			)}
 		</div>
 	);
 };
 
 export default DayButton;
 
-const DailyModal = ({ setModalIsOpen }) => {
+const DailyModal = ({
+	setModalIsOpen,
+	date,
+	title,
+	dayNote,
+	repetitionId,
+	done,
+}) => {
+	const [note, setNote] = useState(dayNote);
+	const handleCloseModal = async () => {
+		if (note !== dayNote) {
+			try {
+				const response = await markDaily(
+					repetitionId,
+					date,
+					note,
+					done
+				);
+				if (response.ok) {
+					setModalIsOpen(false);
+				}
+			} catch (error) { 
+				console.log("Error:", error);
+			}
+		}
+		else { setModalIsOpen(false); }
+	}; 
 	return (
-		<dialog className="fixed bg-brand-purple w-[50%] m-auto block border rounded-xl p-10">
-			<button
-				onClick={() => setModalIsOpen(false)}
-				className="absolute top-4 right-4 "
+		<div
+			className={`backdrop-blur backdrop-opacity-60  backdrop-brightness-75 justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-10 outline-none focus:outline-none`}
+			onClick={handleCloseModal}
+		>
+			<dialog
+				onClick={(e) => e.stopPropagation()}
+				className="fixed inset-0 z-30 bg-brand-purple w-[70%] m-auto block border rounded-xl p-10 text-brand-beige"
 			>
-				{<NotDoneVector width={22} height={22} color={"#ffffff"} />}
-			</button>
-			<h2>05.12.2024</h2>
-			<p>This is a modal triggered by a long press.</p>
-		</dialog>
+				<button
+					onClick={() => setModalIsOpen(false)}
+					className="absolute top-4 right-4 "
+				>
+					{<NotDoneVector width={22} height={22} color={"#ffffff"} />}
+				</button>
+				<div className="flex place-content-between">
+					<h1>{title}</h1>
+					<h2>{`${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`}</h2>
+				</div>
+				<textarea
+					className="bg-brand-purple w-full border rounded"
+					onChange={(e) => {
+						setNote(e.target.value);
+					}}
+					value={note}
+				/>
+			</dialog>
+		</div>
 	);
 };
 

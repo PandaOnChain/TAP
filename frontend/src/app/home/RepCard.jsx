@@ -38,6 +38,15 @@ const RepCard = ({ title, repetitionId, weekNotes, authRefetch }) => {
 							return false;
 						}
 					});
+					const note = weekNotes.find((note) => {
+						const noteDate = new Date(note.date);
+						const buttonDate = new Date(dates[index].date);
+						if (noteDate.getDate() === buttonDate.getDate()) { 
+							return note.note;
+						} else {
+							return "";
+						}
+					});
 
 					return (
 						<DayButton
@@ -47,9 +56,11 @@ const RepCard = ({ title, repetitionId, weekNotes, authRefetch }) => {
 							date={dates[index].date}
 							isToday={isToday}
 							isFuture={isFuture}
+							title={title}
 							repetitionId={repetitionId}
 							status={status}
 							authRefetch={authRefetch}
+							note={note}
 						/>
 					);
 				})}
