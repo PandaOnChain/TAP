@@ -14,6 +14,7 @@ const DayButton = ({
 	dayDateNum,
 	authRefetch,
 	note,
+	updateWeekNotes
 }) => {
 	const queryClient = useQueryClient();
 
@@ -33,6 +34,7 @@ const DayButton = ({
 		try {
 			const response = await markDaily(repetitionId, date, note?.note, !done);
 			if (response.ok) {
+				updateWeekNotes(date, {id: note.id, date: date, note: note?.note, done: !done})
 				setDone(() => !done);
 			}
 		} catch (error) {
