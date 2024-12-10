@@ -23,8 +23,7 @@ export const getReps = async (access_token) => {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: `Bearer ${access_token}`,
-			"ngrok-skip-browser-warning": "nadoel",
+			Authorization: `Bearer ${access_token}`, 
 		},
 	});
 
@@ -43,8 +42,7 @@ export const createRep = async (access_token, title) => {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: `Bearer ${access_token}`,
-			"ngrok-skip-browser-warning": "nadoel",
+			Authorization: `Bearer ${access_token}`, 
 		},
 
 		body: JSON.stringify({ title }),
@@ -59,11 +57,11 @@ export const createRep = async (access_token, title) => {
 	return response;
 };
 
-export const markDaily = async (
+export const markDaily = async ({
 	repetition_id,
 	date,
 	note,
-	done
+	done}
 ) => {
 	const year = date.getFullYear();
 	const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -87,7 +85,7 @@ export const markDaily = async (
 	if (!response.ok) {
 		throw new Error("error during creating dailyNote");
 	}
-	return response;
+	return {response, dateString};
 };
 
 // export const authentincateUser = async () => {

@@ -35,7 +35,6 @@ class RepetitionBase(SQLModel):
 
 
 class RepetitionCreate(RepetitionBase):
-    week_notes: list | None = None
     pass
 
 class RepetitionUpdate(RepetitionBase):

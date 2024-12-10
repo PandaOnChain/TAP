@@ -2,18 +2,18 @@ import React, { useState } from "react";
 import Image from "next/image";
 import DayButton from "./DayButton";
 
-const RepCard = ({ title, repetitionId, weekNotes, authRefetch }) => {
+const RepCard = ({ title, repetitionId, weekNotes, handleAddDailyNote, handleUpdateDailyNote }) => {
 	const today = new Date();
 	const daysLetters = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 	const currentDayIndex = today.getDay();
 	const adjustedDayIndex = currentDayIndex === 0 ? 6 : currentDayIndex - 1;
 	const todayDate = today.getDate();
-	const [weekNote, setWeekNote] = useState(weekNotes)
+	// const [weekNote, setWeekNote] = useState(weekNotes)
 
-	const handleUpdateWeekNote = (index, updatedNote) => {
-		const newWeekNotes = weekNote.map((note, i)=> i !== index ? updatedNote : note)
-		setWeekNote(newWeekNotes)
-	}
+	// const handleUpdateWeekNote = (index, updatedNote) => {
+	// 	const newWeekNotes = weekNote.map((note, i)=> i !== index ? updatedNote : note)
+	// 	setWeekNote(newWeekNotes)
+	// }
 
 	const dates = [];
 	for (let i = 0; i < 7; i++) {
@@ -36,7 +36,7 @@ const RepCard = ({ title, repetitionId, weekNotes, authRefetch }) => {
 					const isFuture = dates[index].timestamp > today.getTime();
 					const dayDateNum = dates[index].dateDay;
 
-					const status = weekNote.find((note) => {
+					const status = weekNotes.find((note) => {
 						const noteDate = new Date(note.date);
 						const buttonDate = new Date(dates[index].date);
 						if (noteDate.getDate() === buttonDate.getDate()) {
@@ -45,7 +45,7 @@ const RepCard = ({ title, repetitionId, weekNotes, authRefetch }) => {
 							return false;
 						}
 					});
-					const note = weekNote.find((note) => {
+					const note = weekNotes.find((note) => {
 						const noteDate = new Date(note.date);
 						const buttonDate = new Date(dates[index].date);
 						if (noteDate.getDate() === buttonDate.getDate()) { 
@@ -66,9 +66,15 @@ const RepCard = ({ title, repetitionId, weekNotes, authRefetch }) => {
 							title={title}
 							repetitionId={repetitionId}
 							status={status}
-							authRefetch={authRefetch}
-							note={note}
-							updateWeekNotes={handleUpdateWeekNote}
+							note={
+								note 
+							}
+							handleDailyNote={
+								note
+									? handleUpdateDailyNote
+									: handleAddDailyNote
+							}
+							// updateWeekNotes={handleUpdateWeekNote}
 						/>
 					);
 				})}

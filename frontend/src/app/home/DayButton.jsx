@@ -14,7 +14,7 @@ const DayButton = ({
 	dayDateNum,
 	authRefetch,
 	note,
-	updateWeekNotes
+	handleDailyNote,
 }) => {
 	const queryClient = useQueryClient();
 
@@ -29,13 +29,25 @@ const DayButton = ({
 		}
 	);
 
-	const [done, setDone] = useState(status?.done);
-	const handleClick = async () => { 
+	// const [done, setDone] = useState(status?.done);
+	const handleClick = async () => {
 		try {
-			const response = await markDaily(repetitionId, date, note?.note, !done);
+			const { response, dateString } = await markDaily({
+				repetition_id: repetitionId,
+				date: date,
+				note: note?.note,
+				done: !status?.done,
+			});
 			if (response.ok) {
-				updateWeekNotes(date, {id: note.id, date: date, note: note?.note, done: !done})
-				setDone(() => !done);
+				handleDailyNote({
+					id: repetitionId,
+					note: {
+						date: dateString,
+						note: note?.note,
+						done: !status?.done,
+					},
+				});
+				// setDone(() => !done);
 			}
 		} catch (error) {
 			if (error?.message.includes("Unauthorized")) {
@@ -62,7 +74,7 @@ const DayButton = ({
 				<div className="">
 					{isFuture && <LockSvg width={22} height={22} />}
 					{isToday &&
-						(done ? (
+						(status?.done ? (
 							<DoneVector
 								width={22}
 								height={22}
@@ -73,7 +85,7 @@ const DayButton = ({
 						))}
 					{!isToday &&
 						!isFuture &&
-						(!done ? (
+						(!status?.done ? (
 							<NotDoneVector
 								width={22}
 								height={22}
@@ -94,8 +106,9 @@ const DayButton = ({
 					date={date}
 					title={title}
 					repetitionId={repetitionId}
-					done={done ? done.done : false}
+					done={status?.done ? status.done : false}
 					dayNote={note?.note}
+					handleDailyNote={handleDailyNote}
 				/>
 			)}
 		</div>
@@ -111,26 +124,36 @@ const DailyModal = ({
 	dayNote,
 	repetitionId,
 	done,
+	handleDailyNote,
 }) => {
 	const [note, setNote] = useState(dayNote);
 	const handleCloseModal = async () => {
 		if (note !== dayNote) {
 			try {
-				const response = await markDaily(
-					repetitionId,
-					date,
-					note,
-					done
-				);
+				const { response, dateString } = await markDaily({
+					repetition_id: repetitionId,
+					date: date,
+					note: note,
+					done: done,
+				});
 				if (response.ok) {
+					handleDailyNote({
+						id: repetitionId,
+						note: {
+							date: dateString,
+							note: note,
+							done: !done,
+						},
+					});
 					setModalIsOpen(false);
 				}
-			} catch (error) { 
+			} catch (error) {
 				console.log("Error:", error);
 			}
+		} else {
+			setModalIsOpen(false);
 		}
-		else { setModalIsOpen(false); }
-	}; 
+	};
 	return (
 		<div
 			className={`backdrop-blur backdrop-opacity-60  backdrop-brightness-75 justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-10 outline-none focus:outline-none`}
@@ -155,7 +178,7 @@ const DailyModal = ({
 					onChange={(e) => {
 						setNote(e.target.value);
 					}}
-					value={note}
+					defaultValue={note ? note : ""}
 				/>
 			</dialog>
 		</div>

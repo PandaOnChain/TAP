@@ -3,11 +3,11 @@ import { createRep } from "../lib/dal";
 import { useQueryClient } from "@tanstack/react-query";
 import { AuthContext } from "../components/auth/Authentication";
 
-const CreateRep = () => {
+const CreateRep = ({handleAddRepetition}) => {
 	// check if input 3+ char and make request
 	const [isCreateActive, setIsCreateActive] = useState(false);
 	const [title, setTitle] = useState("");
-	const queryClient = useQueryClient();
+	// const queryClient = useQueryClient();
 	const { refetch } = useContext(AuthContext);
 
 	const handleCreateButton = async (e) => {
@@ -18,6 +18,8 @@ const CreateRep = () => {
 				const access_token = localStorage.getItem("access_token");
 				const response = await createRep(access_token, title);
 				if (response.ok) {
+					const repetition = await response.json();
+					handleAddRepetition(repetition);
 					setTitle("");
 					setIsCreateActive(false);
 				}
@@ -26,9 +28,9 @@ const CreateRep = () => {
 					refetch();
 				}
 			}
-			await queryClient.invalidateQueries({
-				queryKey: ["repetitions", localStorage.getItem("access_token")],
-			});
+			// await queryClient.invalidateQueries({
+			// 	queryKey: ["repetitions", localStorage.getItem("access_token")],
+			// });
 		}
 	};
 
