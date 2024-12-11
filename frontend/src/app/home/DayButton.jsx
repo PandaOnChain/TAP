@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { markDaily } from "../lib/dal";
 import { useQueryClient } from "@tanstack/react-query";
-import useLongPress from "../hooks/useLongPress"; 
-import useLoongPress from "../hooks/useLoongPress";
+import useLongPress from "../hooks/useLongPress";
 
 const DayButton = ({
 	isToday,
@@ -21,7 +20,7 @@ const DayButton = ({
 
 	const [modalIsOpen, setModalIsOpen] = useState(false);
 
-	const attrs = useLoongPress(
+	const attrs = useLongPress(
 		() => {
 			if (!isFuture) {
 				setModalIsOpen(true);
@@ -31,8 +30,7 @@ const DayButton = ({
 			threshold: 500,
 		}
 	);
-
-	// const [done, setDone] = useState(status?.done);
+ 
 	const handleClick = async () => {
 		try {
 			const { response, dateString } = await markDaily({
@@ -49,8 +47,7 @@ const DayButton = ({
 						note: note?.note,
 						done: !status?.done,
 					},
-				});
-				// setDone(() => !done);
+				}); 
 			}
 		} catch (error) {
 			if (error?.message.includes("Unauthorized")) {
@@ -166,22 +163,18 @@ const DailyModal = ({
 				onClick={(e) => e.stopPropagation()}
 				className="fixed inset-0 z-30 bg-brand-purple w-[70%] m-auto block border rounded-xl p-10 text-brand-beige"
 			>
-				<button
-					onClick={() => setModalIsOpen(false)}
-					className="absolute top-4 right-4 "
-				>
-					{<NotDoneVector width={22} height={22} color={"#ffffff"} />}
-				</button>
 				<div className="flex place-content-between">
 					<h1>{title}</h1>
 					<h2>{`${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`}</h2>
 				</div>
 				<textarea
-					className="bg-brand-purple w-full border rounded"
+					className="bg-brand-purple w-full border rounded ps-2"
 					onChange={(e) => {
 						setNote(e.target.value);
 					}}
 					defaultValue={note ? note : ""}
+					autoFocus
+					placeholder="What did you feel?"
 				/>
 			</dialog>
 		</div>

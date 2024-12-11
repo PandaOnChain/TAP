@@ -2,20 +2,13 @@
 import Loading from "../components/Loading";
 import RepCard from "./RepCard";
 import { getReps } from "../lib/dal";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { AuthContext } from "../components/auth/Authentication";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useReducer } from "react";
 import CreateRep from "./CreateRep";
 
-function updateRepDayStatus(reps, daily) {
-	//filter in reps
-	//filter in dailies
-	//update dailies
-	//return rep to reps
-}
+
 
 function reducer(reps, action) {
-	console.log(action.repetition, reps)
 	switch (action.type) {
 		case "reset_reps":
 			return action.repetitions;
@@ -23,7 +16,6 @@ function reducer(reps, action) {
 			return [...reps, action.repetition];
 
 		case "update_repetition_daily":
-			console.log("update_daily")
 			return reps.map((repetition) => {
 				if (repetition && repetition.id === action.repetition.id) {
 					return {
@@ -39,7 +31,6 @@ function reducer(reps, action) {
 			});
 
 		case "add_repetition_daily":
-			console.log("add_daily")
 			return reps.map((repetition) => {
 				if (repetition && repetition.id === action.repetition.id) {
 					return {

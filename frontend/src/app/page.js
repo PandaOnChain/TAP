@@ -1,37 +1,31 @@
 "use client";
+import { useContext, useEffect } from "react";
+import { AuthContext, AuthProvider } from "./components/auth/Authentication";
 
-import TelegramAuth from "./components/TelegramAuth";
-import { Suspense, useEffect, useState } from "react";
-import WebApp from "@twa-dev/sdk";
-import Link from "next/link";
-import { getReps, getToken } from "./lib/dal";
-import Loading from "./components/Loading";
-import App from "./App";
-import { useRouter } from "next/navigation";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import HomePage from "./home/layout";
 
-// try to get token
-// if localstorage.token !==null => return home page component  // check Suspense react // Ch9 Streaming
-// return loading page
+const queryClient = new QueryClient();
 
-export default function Home() {
-	const router = useRouter();
-
+const App = ({}) => {
 	useEffect(() => {
-		router.push("/home/");
-	});
-
+		const script = document.createElement("script");
+		script.src = "https://cdn.jsdelivr.net/npm/eruda";
+		document.body.appendChild(script);
+		script.onload = () => {
+			eruda.init();
+		};
+		return () => {
+			script.remove();
+		};
+	}, []);
 	return (
-		<main className="flex min-h-screen flex-col items-center justify-center p-24">
-			<h1 className="text-4xl">
-				JWT authentication for Telegram Mini Apps
-			</h1>
-			<div className="flex flex-col">
-				<Link href={"/home/"}>
-					<button type="button" className="p-3 rounded">
-						Go home
-					</button>
-				</Link>
-			</div>
-		</main>
+		<QueryClientProvider client={queryClient}>
+			<AuthProvider>
+				<HomePage />
+			</AuthProvider>
+		</QueryClientProvider>
 	);
-}
+};
+
+export default App;

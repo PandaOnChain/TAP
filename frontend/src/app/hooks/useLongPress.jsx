@@ -1,62 +1,83 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 
-export function isTouchEvent({nativeEvent}){
-    return window.TouchEvent ? nativeEvent instanceof TouchEvent : "touches" in nativeEvent;
+export function isTouchEvent({ nativeEvent }) {
+	return window.TouchEvent
+		? nativeEvent instanceof TouchEvent
+		: "touches" in nativeEvent;
 }
 
-export function isMouseEvent(event){
-    return event.nativeEvent instanceof MouseEvent;
+export function isMouseEvent(event) {
+	return event.nativeEvent instanceof MouseEvent;
 }
 
-export default function useLongPress(callback, options = {}){
-    const {
+export default function useLongPress(callback, options = {}) {
+	const {
 		threshold = 400,
 		onStart,
 		onFinish,
 		onCancel,
-		movementThreshold = 10,
+		moveThreshold = 10,
 	} = options;
-    const isLongPressActive = useRef(false);
-    const isPressed = useRef(false)
-    const timerId = useRef()
-    const [startPosition, setStartPosition] = useState(null);
+	const isLongPressActive = useRef(false);
+	const isPressed = useRef(false);
+	const timerId = useRef();
+	const startX = useRef(0);
+	const startY = useRef(0);
 
-    return useMemo(() => {
+	return useMemo(() => {
 		if (typeof callback !== "function") {
 			return {};
 		}
+
 		const start = (event) => {
 			if (!isMouseEvent(event) && !isTouchEvent(event)) return;
+
+			const { clientX, clientY } = event.nativeEvent.touches
+				? event.nativeEvent.touches[0]
+				: event.nativeEvent;
+
+			startX.current = clientX;
+			startY.current = clientY;
+
 			if (onStart) {
 				onStart(event);
 			}
-			isPressed.current = true;
-			setStartPosition({ x: event.clientX, y: event.clientY });
 
+			isPressed.current = true;
 			timerId.current = setTimeout(() => {
 				callback(event);
 				isLongPressActive.current = true;
 			}, threshold);
 		};
 
+		const move = (event) => {
+			if (!isPressed.current || !isTouchEvent(event)) return;
+
+			const { clientX, clientY } = event.nativeEvent.touches[0];
+			const dx = Math.abs(clientX - startX.current);
+			const dy = Math.abs(clientY - startY.current);
+
+			if (dx > moveThreshold || dy > moveThreshold) {
+				cancel(event);
+			}
+		};
+
 		const cancel = (event) => {
 			if (!isMouseEvent(event) && !isTouchEvent(event)) return;
-			if (isLongPressActive.current || isPressed.current) {
-				if (startPosition) {
-					const dx = Math.abs(event.clientX - startPosition.x);
-					const dy = Math.abs(event.clientY - startPosition.y);
-					if (dx > movementThreshold || dy > movementThreshold) {
-						if (onCancel) {
-							onCancel(event);
-						}
-					} else if (isLongPressActive.current && onFinish) {
-						onFinish(event);
-					}
+
+			if (isLongPressActive.current) {
+				if (onFinish) {
+					onFinish(event);
+				}
+			} else if (isPressed.current) {
+				if (onCancel) {
+					onCancel(event);
 				}
 			}
+
 			isLongPressActive.current = false;
 			isPressed.current = false;
-			setStartPosition(null);
+
 			if (timerId.current) {
 				window.clearTimeout(timerId.current);
 			}
@@ -65,19 +86,16 @@ export default function useLongPress(callback, options = {}){
 		const mouseHandlers = {
 			onMouseDown: start,
 			onMouseUp: cancel,
-			onMouseLeace: cancel,
-			onMouseMove: (e) => {
-				cancel(e);
-			},
+			onMouseLeave: cancel,
 		};
 
 		const touchHandlers = {
 			onTouchStart: start,
+			onTouchMove: move, // Track finger movement
 			onTouchEnd: cancel,
-			onTouchMove: (e) => {
-				cancel(e);
-			},
+			onTouchCancel: cancel,
 		};
+
 		return { ...mouseHandlers, ...touchHandlers };
-	}, [callback, threshold, onCancel, onFinish, onStart, movementThreshold]);
+	}, [callback, threshold, onCancel, onFinish, onStart, moveThreshold]);
 }
