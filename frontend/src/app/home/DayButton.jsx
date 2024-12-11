@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { markDaily } from "../lib/dal";
 import { useQueryClient } from "@tanstack/react-query";
-import useLongPress from "../hooks/useLongPress";
+import useLongPress from "../hooks/useLongPress"; 
+import useLoongPress from "../hooks/useLoongPress";
 
 const DayButton = ({
 	isToday,
@@ -20,9 +21,11 @@ const DayButton = ({
 
 	const [modalIsOpen, setModalIsOpen] = useState(false);
 
-	const attrs = useLongPress(
+	const attrs = useLoongPress(
 		() => {
-			setModalIsOpen(true);
+			if (!isFuture) {
+				setModalIsOpen(true);
+			}
 		},
 		{
 			threshold: 500,
