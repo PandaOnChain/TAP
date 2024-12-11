@@ -142,7 +142,7 @@ const DailyModal = ({
 						note: {
 							date: dateString,
 							note: note,
-							done: !done,
+							done: done,
 						},
 					});
 					setModalIsOpen(false);
